@@ -54,7 +54,7 @@ export default function ITUsersPage() {
     email: "",
     password: "",
     confirmPassword: "",
-    role: "USER" as const,
+    role: "USER" as "ADMIN" | "USER" | "IT",
     department: "",
     phoneNumber: "",
     lineId: "",
