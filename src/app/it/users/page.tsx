@@ -434,7 +434,9 @@ export default function ITUsersPage() {
                   label="ชื่อ-นามสกุล"
                   required
                   value={formData.name}
-                  onChange={(v) => setFormData({ ...formData, name: v })}
+                  onChange={(v: string) =>
+                    setFormData({ ...formData, name: v })
+                  }
                   placeholder="ชื่อผู้ใช้"
                 />
                 <FormInput
@@ -442,7 +444,9 @@ export default function ITUsersPage() {
                   type="email"
                   required
                   value={formData.email}
-                  onChange={(v) => setFormData({ ...formData, email: v })}
+                  onChange={(v: string) =>
+                    setFormData({ ...formData, email: v })
+                  }
                   placeholder="example@email.com"
                 />
               </div>
@@ -551,13 +555,17 @@ export default function ITUsersPage() {
                 <FormInput
                   label="แผนก"
                   value={formData.department}
-                  onChange={(v) => setFormData({ ...formData, department: v })}
+                  onChange={(v: string) =>
+                    setFormData({ ...formData, department: v })
+                  }
                   placeholder="IT, Marketing, etc."
                 />
                 <FormInput
                   label="เบอร์โทรศัพท์"
                   value={formData.phoneNumber}
-                  onChange={(v) => setFormData({ ...formData, phoneNumber: v })}
+                  onChange={(v: string) =>
+                    setFormData({ ...formData, phoneNumber: v })
+                  }
                   placeholder="08x-xxx-xxxx"
                 />
               </div>
@@ -565,7 +573,9 @@ export default function ITUsersPage() {
               <FormInput
                 label="Line ID"
                 value={formData.lineId}
-                onChange={(v) => setFormData({ ...formData, lineId: v })}
+                onChange={(v: string) =>
+                  setFormData({ ...formData, lineId: v })
+                }
                 placeholder="@username"
               />
             </div>
@@ -621,7 +631,9 @@ export default function ITUsersPage() {
                   type="email"
                   required
                   value={formData.email}
-                  onChange={(v) => setFormData({ ...formData, email: v })}
+                  onChange={(v: string) =>
+                    setFormData({ ...formData, email: v })
+                  }
                 />
               </div>
 
@@ -714,7 +726,9 @@ export default function ITUsersPage() {
                 <FormInput
                   label="แผนก"
                   value={formData.department}
-                  onChange={(v) => setFormData({ ...formData, department: v })}
+                  onChange={(v: string) =>
+                    setFormData({ ...formData, department: v })
+                  }
                   placeholder="IT, Marketing, etc."
                 />
               </div>
@@ -723,13 +737,17 @@ export default function ITUsersPage() {
                 <FormInput
                   label="เบอร์โทรศัพท์"
                   value={formData.phoneNumber}
-                  onChange={(v) => setFormData({ ...formData, phoneNumber: v })}
+                  onChange={(v: string) =>
+                    setFormData({ ...formData, phoneNumber: v })
+                  }
                   placeholder="08x-xxx-xxxx"
                 />
                 <FormInput
                   label="Line ID"
                   value={formData.lineId}
-                  onChange={(v) => setFormData({ ...formData, lineId: v })}
+                  onChange={(v: string) =>
+                    setFormData({ ...formData, lineId: v })
+                  }
                   placeholder="@username"
                 />
               </div>
