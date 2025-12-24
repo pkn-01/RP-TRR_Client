@@ -153,13 +153,16 @@ export default function CreateRepairRequest() {
         formDataToSend.append("files", file);
       });
 
-      const response = await fetch("http://localhost:3001/api/tickets", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: formDataToSend,
-      });
+      const response = await fetch(
+        "https://rp-trr-server-mbyi.vercel.app/api/tickets",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: formDataToSend,
+        }
+      );
 
       if (!response.ok) {
         const error = await response.json();
