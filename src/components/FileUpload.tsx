@@ -2,35 +2,55 @@ import { ChangeEvent } from "react";
 
 interface FileUploadProps {
   label: string;
-  onChange: (files: File[]) => void;
+  onChange?: (files: File[]) => void;
+  onFilesChange?: (files: File[]) => void;
+  files?: File[];
   multiple?: boolean;
   accept?: string;
   maxSize?: number; // in MB
+  maxSizeMB?: number; // alternative name for maxSize
+  maxFiles?: number;
   required?: boolean;
 }
 
 export default function FileUpload({
   label,
   onChange,
+  onFilesChange,
+  files = [],
   multiple = true,
   accept = ".pdf,.jpg,.jpeg,.png,.doc,.docx",
-  maxSize = 10,
+  maxSize,
+  maxSizeMB = 10,
+  maxFiles = 5,
   required = false,
 }: FileUploadProps) {
+  const limit = maxSize || maxSizeMB;
+
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
+    let newFiles = Array.from(e.target.files || []);
+
+    // Check max files
+    if (newFiles.length + files.length > maxFiles) {
+      alert(`คุณสามารถอัปโหลดไฟล์ได้สูงสุด ${maxFiles} ไฟล์`);
+      newFiles = newFiles.slice(0, maxFiles - files.length);
+    }
 
     // Validate file size
-    const validFiles = files.filter((file) => {
+    const validFiles = newFiles.filter((file) => {
       const fileSizeInMB = file.size / (1024 * 1024);
-      if (fileSizeInMB > maxSize) {
-        alert(`ไฟล์ ${file.name} มีขนาดใหญ่เกินไป (สูงสุด ${maxSize}MB)`);
+      if (fileSizeInMB > limit) {
+        alert(`ไฟล์ ${file.name} มีขนาดใหญ่เกินไป (สูงสุด ${limit}MB)`);
         return false;
       }
       return true;
     });
 
-    onChange(validFiles);
+    const updatedFiles = [...files, ...validFiles];
+    const handler = onFilesChange || onChange;
+    if (handler) {
+      handler(updatedFiles);
+    }
   };
 
   return (
@@ -70,7 +90,8 @@ export default function FileUpload({
             <p className="hidden sm:block">หรือลากไฟล์มาวางที่นี่</p>
           </div>
           <p className="text-xs text-gray-500">
-            PNG, JPG, PDF, DOC, DOCX ขนาดไม่เกิน {maxSize}MB
+            PNG, JPG, PDF, DOC, DOCX ขนาดไม่เกิน {limit}MB (สูงสุด {maxFiles}{" "}
+            ไฟล์)
           </p>
         </div>
       </div>

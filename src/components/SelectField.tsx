@@ -6,6 +6,7 @@ interface SelectFieldProps {
   placeholder?: string;
   required?: boolean;
   disabled?: boolean;
+  error?: string;
 }
 
 export default function SelectField({
@@ -16,6 +17,7 @@ export default function SelectField({
   placeholder = "-- เลือก --",
   required = false,
   disabled = false,
+  error,
 }: SelectFieldProps) {
   return (
     <div className="mb-4">
@@ -30,11 +32,13 @@ export default function SelectField({
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
         required={required}
-        className={`w-full px-3 sm:px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl text-base text-slate-900 font-medium transition-all duration-200 outline-none appearance-none cursor-pointer min-h-[44px]
+        className={`w-full px-3 sm:px-4 py-3 bg-slate-50 border-2 rounded-xl text-base text-slate-900 font-medium transition-all duration-200 outline-none appearance-none cursor-pointer min-h-[44px]
           ${
-            disabled
+            error
+              ? "border-red-500 focus:ring-red-500/20 focus:border-red-500"
+              : disabled
               ? "bg-slate-100 text-slate-400 cursor-not-allowed border-slate-200"
-              : "hover:border-slate-300 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 active:bg-slate-100"
+              : "border-slate-200 hover:border-slate-300 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 active:bg-slate-100"
           }
         `}
       >
@@ -47,6 +51,9 @@ export default function SelectField({
           </option>
         ))}
       </select>
+      {error && (
+        <p className="text-red-600 text-sm mt-2 font-medium">{error}</p>
+      )}
       {/* Custom Arrow Icon */}
       <style>{`
         select {
