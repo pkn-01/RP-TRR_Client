@@ -203,17 +203,14 @@ export default function AdminUsersPage() {
             <UserTable
               users={filteredUsers}
               isLoading={isLoading}
-              onView={(u) => {
-                setSelectedUser(u);
-                setIsViewOnly(true);
-                setIsModalOpen(true);
-              }}
               onEdit={(u) => {
                 setSelectedUser(u);
                 setIsViewOnly(false);
                 setIsModalOpen(true);
               }}
-              onDelete={setDeleteUser}
+              onDelete={(u) => {
+                setDeleteUser(u);
+              }}
             />
 
             {/* Empty State */}
