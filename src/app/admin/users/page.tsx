@@ -287,7 +287,6 @@ export default function AdminUsersPage() {
         <UserModal
           user={selectedUser}
           isOpen={isModalOpen}
-          isViewOnly={isViewOnly}
           onClose={() => {
             setIsModalOpen(false);
             setSelectedUser(null);
