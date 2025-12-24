@@ -211,29 +211,29 @@ export default function AdminLoansPage() {
       if (selectedLoan) {
         // แก้ไขการยืมที่มีอยู่
         console.log(`🔄 Updating loan ${selectedLoan.id}...`);
-        
+
         const response = await apiFetch(`/api/loans/${selectedLoan.id}`, {
           method: "PUT",
           body: JSON.stringify(dataToSend),
         });
-        
+
         console.log("✅ Update successful:", response);
         alert("อัปเดตการยืมสำเร็จ");
-        
+
         // ปิด edit modal
         handleCloseEditModal();
       } else {
         // สร้างการยืมใหม่
         console.log("➕ Creating new loan...");
-        
+
         const response = await apiFetch("/api/loans", {
           method: "POST",
           body: JSON.stringify(dataToSend),
         });
-        
+
         console.log("✅ Create successful:", response);
         alert("เพิ่มรายการสำเร็จ");
-        
+
         // ปิด add modal
         setShowModal(false);
         setFormData({
@@ -254,7 +254,7 @@ export default function AdminLoansPage() {
       // Refresh ข้อมูล
       console.log("🔄 Refreshing loans data...");
       await fetchLoans();
-      
+
       console.log("✅ Loans refreshed!");
       console.log("=== handleAddLoan END ===");
     } catch (err: unknown) {
@@ -325,10 +325,10 @@ export default function AdminLoansPage() {
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <StatCard label="ทั้งหมด" count={loanStats.total} />
-          <StatCard label="กำลังยืม" count={loanStats.active}  />
-          <StatCard label="คืนแล้ว" count={loanStats.returned}  />
-          <StatCard label="เกินกำหนด" count={loanStats.overdue} />
+          <StatCard label="ทั้งหมด" count={loanStats.total} icon="📊" />
+          <StatCard label="กำลังยืม" count={loanStats.active} icon="📦" />
+          <StatCard label="คืนแล้ว" count={loanStats.returned} icon="✓" />
+          <StatCard label="เกินกำหนด" count={loanStats.overdue} icon="⚠" />
         </div>
 
         {/* Search & Filter */}
@@ -502,7 +502,9 @@ export default function AdminLoansPage() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto shadow-lg">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-zinc-900">เพิ่มการยืมใหม่</h2>
+              <h2 className="text-xl font-bold text-zinc-900">
+                เพิ่มการยืมใหม่
+              </h2>
               <button
                 onClick={() => setShowModal(false)}
                 className="text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 p-1 rounded"
@@ -690,7 +692,9 @@ export default function AdminLoansPage() {
             <div className="flex justify-between items-center mb-6">
               <div>
                 <h2 className="text-xl font-bold text-zinc-900">แก้ไขการยืม</h2>
-                <p className="text-sm text-zinc-500 mt-1">รหัส #{selectedLoan.id}</p>
+                <p className="text-sm text-zinc-500 mt-1">
+                  รหัส #{selectedLoan.id}
+                </p>
               </div>
               <button
                 onClick={handleCloseEditModal}
