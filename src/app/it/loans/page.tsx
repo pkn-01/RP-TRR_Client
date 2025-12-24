@@ -35,6 +35,7 @@ interface Loan {
   quantity: number;
   borrowDate: string;
   expectedReturnDate: string;
+  returnDate?: string;
   status: LoanStatus;
   borrowerName: string;
   borrowerDepartment: string;
