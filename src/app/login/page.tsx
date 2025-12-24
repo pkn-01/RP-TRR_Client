@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import InputField from '@/components/InputField';
-import Button from '@/components/Button';
-import Card from '@/components/Card';
-import Alert from '@/components/Alert';
-import FormDivider from '@/components/FormDivider';
-import { AuthService } from '@/lib/authService';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import InputField from "@/components/InputField";
+import Button from "@/components/Button";
+import Card from "@/components/Card";
+import Alert from "@/components/Alert";
+import FormDivider from "@/components/FormDivider";
+import { AuthService } from "@/lib/authService";
 
 interface FormErrors {
   email?: string;
@@ -17,26 +17,26 @@ interface FormErrors {
 
 export default function Login() {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
     if (!email) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      newErrors.email = 'Invalid email format';
+      newErrors.email = "Invalid email format";
     }
 
     if (!password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = "Password is required";
     } else if (password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+      newErrors.password = "Password must be at least 6 characters";
     }
 
     setErrors(newErrors);
@@ -49,28 +49,28 @@ export default function Login() {
     if (!validateForm()) return;
 
     setIsLoading(true);
-    setErrorMessage('');
-    setSuccessMessage('');
+    setErrorMessage("");
+    setSuccessMessage("");
 
     try {
       const response = await AuthService.login({ email, password });
-      console.log('Login response:', response);
-      const userRole = response.role || localStorage.getItem('role') || 'USER';
-      console.log('User role:', userRole);
-      
-      setSuccessMessage('Login successful! Redirecting...');
+      console.log("Login response:", response);
+      const userRole = response.role || localStorage.getItem("role") || "USER";
+      console.log("User role:", userRole);
+
+      setSuccessMessage("Login successful! Redirecting...");
       setTimeout(() => {
         // Redirect based on role
-        if (userRole === 'ADMIN') {
-          router.push('/admin');
-        } else if (userRole === 'IT') {
-          router.push('/it/dashboard');
+        if (userRole === "ADMIN") {
+          router.push("/admin");
+        } else if (userRole === "IT") {
+          router.push("/it/dashboard");
         } else {
-          router.push('/tickets');
+          router.push("/tickets/create-line-oa");
         }
       }, 1500);
     } catch (error: any) {
-      setErrorMessage(error.message || 'Login failed. Please try again.');
+      setErrorMessage(error.message || "Login failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -89,9 +89,7 @@ export default function Login() {
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
               ยินดีต้อนรับกลับมา
             </h1>
-            <p className="text-gray-600">
-              เข้าสู่ระบบด้วยอีเมลของคุณ
-            </p>
+            <p className="text-gray-600">เข้าสู่ระบบด้วยอีเมลของคุณ</p>
           </div>
 
           {/* Alerts */}
@@ -99,12 +97,10 @@ export default function Login() {
             <Alert
               type="error"
               message={errorMessage}
-              onClose={() => setErrorMessage('')}
+              onClose={() => setErrorMessage("")}
             />
           )}
-          {successMessage && (
-            <Alert type="success" message={successMessage} />
-          )}
+          {successMessage && <Alert type="success" message={successMessage} />}
 
           {/* Form */}
           <form onSubmit={handleLogin} className="space-y-5">
@@ -135,9 +131,7 @@ export default function Login() {
                   type="checkbox"
                   className="w-4 h-4 rounded border-gray-300 focus:ring-blue-500"
                 />
-                <span className="ml-2 text-sm text-gray-600">
-                  จำฉันไว้
-                </span>
+                <span className="ml-2 text-sm text-gray-600">จำฉันไว้</span>
               </label>
               <Link
                 href="#"
@@ -163,7 +157,7 @@ export default function Login() {
           {/* Sign up link */}
           <div className="text-center">
             <p className="text-gray-600">
-              ยังไม่มีบัญชี?{' '}
+              ยังไม่มีบัญชี?{" "}
               <Link
                 href="/register"
                 className="text-blue-600 hover:text-blue-700 font-semibold"
