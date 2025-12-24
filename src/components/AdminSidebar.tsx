@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useState, useCallback, useEffect } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { useState, useCallback, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   Wrench,
@@ -16,7 +16,7 @@ import {
   Bell,
   User,
   Package,
-} from 'lucide-react';
+} from "lucide-react";
 
 interface MenuItem {
   icon: React.ComponentType<{ size: number; strokeWidth?: number }>;
@@ -33,27 +33,27 @@ export default function AdminSidebar() {
   const pathname = usePathname();
 
   const menuItems: MenuItem[] = [
-    { icon: LayoutDashboard, label: 'แดชบอร์ด', href: '/admin/dashboard' },
+    { icon: LayoutDashboard, label: "แดชบอร์ด", href: "/admin/dashboard" },
     {
       icon: Wrench,
-      label: 'งานซ่อมแซม',
-      href: '/admin/repairs',
+      label: "งานซ่อมแซม",
+      href: "/admin/repairs",
       subItems: [
-        { label: 'รายการทั้งหมด', href: '/admin/repairs' },
+        { label: "รายการทั้งหมด", href: "/admin/repairs" },
         // { label: 'รอการอนุมัติ', href: '/admin/repairs?status=pending' },
         // { label: 'กำลังดำเนินการ', href: '/admin/repairs?status=in-progress' },
         // { label: 'เสร็จสิ้น', href: '/admin/repairs?status=completed' },
       ],
     },
-    { icon: Package, label: 'ระบบยืมของ', href: '/admin/loans' },
-    { icon: Users, label: 'จัดการผู้ใช้งาน', href: '/admin/users' },
+    { icon: Package, label: "ระบบยืมของ", href: "/admin/loans" },
+    { icon: Users, label: "จัดการผู้ใช้งาน", href: "/admin/users" },
     {
       icon: Settings,
-      label: 'ตั้งค่าระบบ',
-      href: '/admin/settings',
+      label: "ตั้งค่าระบบ",
+      href: "/admin/settings",
       subItems: [
-        { label: 'ข้อมูลทั่วไป', href: '/admin/settings' },
-        { label: 'สิทธิ์เข้าถึง', href: '/admin/settings/permissions' },
+        { label: "ข้อมูลทั่วไป", href: "/admin/settings" },
+        { label: "สิทธิ์เข้าถึง", href: "/admin/settings/permissions" },
       ],
     },
   ];
@@ -67,7 +67,7 @@ export default function AdminSidebar() {
   const handleLogout = async () => {
     setIsLoggingOut(true);
     localStorage.clear();
-    router.push('/login');
+    router.push("/login");
   };
 
   return (
@@ -75,10 +75,14 @@ export default function AdminSidebar() {
       {/* Mobile Header */}
       <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-zinc-200 z-50 px-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
-        
-          <span className="font-semibold text-zinc-900 tracking-tight">TRR-RP</span>
+          <span className="font-semibold text-zinc-900 tracking-tight">
+            TRR-RP
+          </span>
         </div>
-        <button onClick={() => setIsOpen(!isOpen)} className="p-2 text-zinc-500 hover:text-zinc-700 transition-colors">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="p-2 text-zinc-500 hover:text-zinc-700 transition-colors"
+        >
           {isOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
@@ -86,16 +90,16 @@ export default function AdminSidebar() {
       {/* Sidebar */}
       <aside
         className={`fixed left-0 top-0 h-screen w-64 bg-white border-r border-zinc-200 transition-transform duration-300 z-[60] ${
-          isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+          isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
       >
         {/* Branding */}
         <div className="h-20 flex items-center px-8">
           <Link href="/admin/dashboard" className="flex items-center gap-3">
-          
             <div className="flex flex-col">
-              <span className="text-md font-bold text-zinc-900 tracking-tight">TRR-RP</span>
-             
+              <span className="text-md font-bold text-zinc-900 tracking-tight">
+                TRR-RP
+              </span>
             </div>
           </Link>
         </div>
@@ -113,23 +117,49 @@ export default function AdminSidebar() {
                   <button
                     onClick={() => toggleSubMenu(item.label)}
                     className={`w-full flex items-center justify-between px-4 py-2.5 rounded-lg transition-all group ${
-                      isExpanded || isActive ? 'bg-zinc-50 text-zinc-900' : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900'
+                      isExpanded || isActive
+                        ? "bg-zinc-50 text-zinc-900"
+                        : "text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900"
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <Icon size={18} strokeWidth={1.5} className={isActive || isExpanded ? 'text-zinc-900' : 'text-zinc-400 group-hover:text-zinc-900'} />
+                      <span
+                        className={
+                          isActive || isExpanded
+                            ? "text-zinc-900"
+                            : "text-zinc-400 group-hover:text-zinc-900"
+                        }
+                      >
+                        <Icon size={18} strokeWidth={1.5} />
+                      </span>
                       <span className="text-sm font-medium">{item.label}</span>
                     </div>
-                    <ChevronDown size={14} className={`transition-transform duration-200 ${isExpanded ? 'rotate-180' : 'opacity-40'}`} />
+                    <span
+                      className={`transition-transform duration-200 ${
+                        isExpanded ? "rotate-180" : "opacity-40"
+                      }`}
+                    >
+                      <ChevronDown size={14} />
+                    </span>
                   </button>
                 ) : (
                   <Link
                     href={item.href}
                     className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all group ${
-                      isActive ? 'bg-zinc-200 text-zinc-900' : 'text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900'
+                      isActive
+                        ? "bg-zinc-200 text-zinc-900"
+                        : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
                     }`}
                   >
-                    <Icon size={18} strokeWidth={1.5} className={isActive ? 'text-zinc-900' : 'text-zinc-400 group-hover:text-zinc-900'} />
+                    <span
+                      className={
+                        isActive
+                          ? "text-zinc-900"
+                          : "text-zinc-400 group-hover:text-zinc-900"
+                      }
+                    >
+                      <Icon size={18} strokeWidth={1.5} />
+                    </span>
                     <span className="text-sm font-medium">{item.label}</span>
                   </Link>
                 )}
@@ -142,7 +172,9 @@ export default function AdminSidebar() {
                         key={sub.label}
                         href={sub.href}
                         className={`block py-2 px-6 text-xs font-medium transition-colors ${
-                          pathname === sub.href ? 'text-zinc-900' : 'text-zinc-400 hover:text-zinc-900'
+                          pathname === sub.href
+                            ? "text-zinc-900"
+                            : "text-zinc-400 hover:text-zinc-900"
                         }`}
                       >
                         {sub.label}
@@ -162,16 +194,20 @@ export default function AdminSidebar() {
               <User size={18} />
             </div>
             <div className="flex flex-col min-w-0">
-              <span className="text-xs font-bold text-zinc-800 truncate">PKN</span>
-              <span className="text-[10px] text-zinc-400 uppercase tracking-tight">Administrator</span>
+              <span className="text-xs font-bold text-zinc-800 truncate">
+                PKN
+              </span>
+              <span className="text-[10px] text-zinc-400 uppercase tracking-tight">
+                Administrator
+              </span>
             </div>
           </div>
-          
+
           <div className="grid grid-cols-2 gap-2 mt-2">
             <button className="flex items-center justify-center p-2 rounded-md bg-white border border-zinc-200 text-zinc-400 hover:text-zinc-900 hover:border-zinc-400 transition-all">
               <Bell size={16} />
             </button>
-            <button 
+            <button
               onClick={handleLogout}
               className="flex items-center justify-center p-2 rounded-md bg-white border border-zinc-200 text-zinc-400 hover:text-red-600 hover:border-red-200 hover:bg-red-50 transition-all"
             >
@@ -183,7 +219,10 @@ export default function AdminSidebar() {
 
       {/* Backdrop */}
       {isOpen && (
-        <div className="fixed inset-0 bg-black/10 backdrop-blur-[2px] lg:hidden z-[55]" onClick={() => setIsOpen(false)} />
+        <div
+          className="fixed inset-0 bg-black/10 backdrop-blur-[2px] lg:hidden z-[55]"
+          onClick={() => setIsOpen(false)}
+        />
       )}
     </>
   );
