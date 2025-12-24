@@ -21,8 +21,8 @@ export default function FileUpload({
   multiple = true,
   accept = ".pdf,.jpg,.jpeg,.png,.doc,.docx",
   maxSize,
-  maxSizeMB = 10,
-  maxFiles = 5,
+  maxSizeMB = 5,
+  maxFiles = 3,
   required = false,
 }: FileUploadProps) {
   const limit = maxSize || maxSizeMB;

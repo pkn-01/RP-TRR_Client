@@ -575,8 +575,8 @@ export default function CreateLineOAContent() {
                   label="อัปโหลดไฟล์สำเร็จ"
                   files={files}
                   onFilesChange={setFiles}
-                  maxFiles={5}
-                  maxSizeMB={10}
+                  maxFiles={3}
+                  maxSizeMB={5}
                 />
               </div>
 
