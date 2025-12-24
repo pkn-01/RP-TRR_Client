@@ -114,23 +114,24 @@ export default function ITSidebar() {
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <Icon
-                        size={18}
-                        strokeWidth={1.5}
+                      <span
                         className={
                           isActive || isExpanded
                             ? "text-zinc-900"
                             : "text-zinc-400 group-hover:text-zinc-900"
                         }
-                      />
+                      >
+                        <Icon size={18} strokeWidth={1.5} />
+                      </span>
                       <span className="text-sm font-medium">{item.label}</span>
                     </div>
-                    <ChevronDown
-                      size={14}
+                    <span
                       className={`transition-transform duration-200 ${
                         isExpanded ? "rotate-180" : "opacity-40"
                       }`}
-                    />
+                    >
+                      <ChevronDown size={14} />
+                    </span>
                   </button>
                 ) : (
                   <Link
@@ -141,15 +142,15 @@ export default function ITSidebar() {
                         : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
                     }`}
                   >
-                    <Icon
-                      size={18}
-                      strokeWidth={1.5}
+                    <span
                       className={
                         isActive
                           ? "text-zinc-900"
                           : "text-zinc-400 group-hover:text-zinc-900"
                       }
-                    />
+                    >
+                      <Icon size={18} strokeWidth={1.5} />
+                    </span>
                     <span className="text-sm font-medium">{item.label}</span>
                   </Link>
                 )}
