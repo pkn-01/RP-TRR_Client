@@ -1,0 +1,223 @@
+/**
+ * Mobile Responsiveness Quick Reference
+ * Use these patterns for consistent mobile optimization across the application
+ */
+
+/* ============================================
+   TOUCH TARGET SIZES
+   ============================================ */
+
+/* Minimum 44x44px for mobile interactions */
+.btn-mobile {
+  @apply min-h-[44px] min-w-[44px];
+}
+
+/* Form input minimum height */
+.form-control-mobile {
+  @apply py-3 px-3 sm:px-4 min-h-[44px] text-base;
+}
+
+/* ============================================
+   RESPONSIVE TYPOGRAPHY
+   ============================================ */
+
+.heading-responsive {
+  @apply text-lg sm:text-xl md:text-2xl lg:text-3xl;
+}
+
+.subheading-responsive {
+  @apply text-base sm:text-lg md:text-xl;
+}
+
+.text-responsive {
+  @apply text-sm sm:text-base;
+}
+
+/* ============================================
+   RESPONSIVE PADDING
+   ============================================ */
+
+.p-responsive {
+  @apply p-4 sm:p-6 md:p-8;
+}
+
+.px-responsive {
+  @apply px-4 sm:px-6 md:px-8;
+}
+
+.py-responsive {
+  @apply py-4 sm:py-6 md:py-8;
+}
+
+/* ============================================
+   RESPONSIVE GAP
+   ============================================ */
+
+.gap-responsive {
+  @apply gap-4 sm:gap-6;
+}
+
+/* ============================================
+   RESPONSIVE GRID
+   ============================================ */
+
+.grid-responsive-2 {
+  @apply grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6;
+}
+
+.grid-responsive-3 {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6;
+}
+
+.grid-responsive-4 {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6;
+}
+
+/* ============================================
+   SAFE AREA SUPPORT (Notched Devices)
+   ============================================ */
+
+.pt-safe {
+  @apply pt-safe-top;
+}
+
+.pb-safe {
+  @apply pb-safe-bottom;
+}
+
+.pl-safe {
+  @apply pl-safe-left;
+}
+
+.pr-safe {
+  @apply pr-safe-right;
+}
+
+/* ============================================
+   MOBILE-FIRST VISIBILITY
+   ============================================ */
+
+.hide-mobile {
+  @apply hidden md:block;
+}
+
+.show-mobile-only {
+  @apply md:hidden;
+}
+
+.hide-desktop {
+  @apply md:hidden;
+}
+
+/* ============================================
+   TOUCH-FRIENDLY INTERACTIONS
+   ============================================ */
+
+.btn-touch {
+  @apply min-h-[44px] touch-manipulation active:scale-95 transition-all;
+}
+
+.interactive-mobile {
+  @apply -webkit-tap-highlight-color-transparent touch-manipulation;
+}
+
+/* ============================================
+   RESPONSIVE BORDER RADIUS
+   ============================================ */
+
+.rounded-responsive {
+  @apply rounded-lg sm:rounded-xl;
+}
+
+/* ============================================
+   RESPONSIVE SHADOWS
+   ============================================ */
+
+.shadow-responsive {
+  @apply shadow-sm sm:shadow-md;
+}
+
+/* ============================================
+   RESPONSIVE TEXT TRUNCATION
+   ============================================ */
+
+.truncate-responsive {
+  @apply truncate sm:line-clamp-2;
+}
+
+/* ============================================
+   USAGE EXAMPLES
+   ============================================ */
+
+/*
+  Header with safe area and responsive sizing:
+  <header class="pt-safe px-responsive">
+    <h1 class="heading-responsive">Title</h1>
+  </header>
+
+  Form inputs with proper touch targets:
+  <input class="form-control-mobile w-full" />
+
+  Responsive grid layout:
+  <div class="grid-responsive-3">
+    <div>Card 1</div>
+    <div>Card 2</div>
+    <div>Card 3</div>
+  </div>
+
+  Touch-friendly button:
+  <button class="btn-touch bg-blue-600 text-white">
+    Click me
+  </button>
+
+  Mobile-only element:
+  <div class="show-mobile-only">
+    Mobile Menu
+  </div>
+
+  Desktop-only element:
+  <div class="hide-mobile">
+    Desktop Navigation
+  </div>
+*/
+
+/* ============================================
+   MEDIA QUERIES (When Tailwind isn't enough)
+   ============================================ */
+
+@media (max-width: 640px) {
+  /* Mobile-specific styles */
+  html {
+    font-size: 16px; /* Prevent zoom on input focus */
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  /* Tablet-specific styles */
+}
+
+@media (min-width: 1024px) {
+  /* Desktop-specific styles */
+}
+
+/* ============================================
+   VIEWPORT-FIT: COVER
+   Properly handles safe areas on notched devices
+   ============================================ */
+
+/*
+  Already set in layout.tsx:
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+*/
+
+/* ============================================
+   PREVENT TAP HIGHLIGHT ON TOUCH DEVICES
+   Already included in globals.css
+   ============================================ */
+
+/*
+  a, button {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+*/

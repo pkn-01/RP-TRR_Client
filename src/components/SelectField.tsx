@@ -13,14 +13,14 @@ export default function SelectField({
   value,
   onChange,
   options,
-  placeholder = '-- เลือก --',
+  placeholder = "-- เลือก --",
   required = false,
   disabled = false,
 }: SelectFieldProps) {
   return (
     <div className="mb-4">
       {label && (
-        <label className="block text-sm font-semibold text-slate-700 mb-3">
+        <label className="block text-sm sm:text-base font-semibold text-slate-700 mb-3">
           {label}
           {required && <span className="text-red-500 ml-1">*</span>}
         </label>
@@ -30,10 +30,11 @@ export default function SelectField({
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
         required={required}
-        className={`w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl text-slate-900 font-medium transition-all duration-200 outline-none appearance-none cursor-pointer
-          ${disabled 
-            ? 'bg-slate-100 text-slate-400 cursor-not-allowed border-slate-200' 
-            : 'hover:border-slate-300 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500'
+        className={`w-full px-3 sm:px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl text-base text-slate-900 font-medium transition-all duration-200 outline-none appearance-none cursor-pointer min-h-[44px]
+          ${
+            disabled
+              ? "bg-slate-100 text-slate-400 cursor-not-allowed border-slate-200"
+              : "hover:border-slate-300 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 active:bg-slate-100"
           }
         `}
       >

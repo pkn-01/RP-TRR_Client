@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 
 interface ButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
-  type?: 'button' | 'submit' | 'reset';
-  variant?: 'primary' | 'secondary' | 'danger';
-  size?: 'sm' | 'md' | 'lg';
+  type?: "button" | "submit" | "reset";
+  variant?: "primary" | "secondary" | "danger";
+  size?: "sm" | "md" | "lg";
   disabled?: boolean;
   isLoading?: boolean;
   fullWidth?: boolean;
@@ -15,27 +15,30 @@ interface ButtonProps {
 export default function Button({
   children,
   onClick,
-  type = 'button',
-  variant = 'primary',
-  size = 'md',
+  type = "button",
+  variant = "primary",
+  size = "md",
   disabled = false,
   isLoading = false,
   fullWidth = false,
-  className = '',
+  className = "",
 }: ButtonProps) {
   const baseClasses =
-    'font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100';
+    "font-semibold rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 min-h-[44px] sm:min-h-[40px] flex items-center justify-center touch-manipulation";
 
   const variantClasses = {
-    primary: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
-    secondary: 'bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-gray-400',
-    danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
+    primary:
+      "bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 focus:ring-blue-500",
+    secondary:
+      "bg-gray-200 text-gray-800 hover:bg-gray-300 active:bg-gray-400 focus:ring-gray-400",
+    danger:
+      "bg-red-600 text-white hover:bg-red-700 active:bg-red-800 focus:ring-red-500",
   };
 
   const sizeClasses = {
-    sm: 'px-3 py-2 text-sm',
-    md: 'px-4 py-3 text-base',
-    lg: 'px-6 py-4 text-lg',
+    sm: "px-3 py-2 text-sm",
+    md: "px-4 py-3 text-base",
+    lg: "px-6 py-4 text-lg",
   };
 
   return (
@@ -47,7 +50,7 @@ export default function Button({
         ${baseClasses}
         ${variantClasses[variant]}
         ${sizeClasses[size]}
-        ${fullWidth ? 'w-full' : ''}
+        ${fullWidth ? "w-full" : ""}
         ${className}
       `}
     >

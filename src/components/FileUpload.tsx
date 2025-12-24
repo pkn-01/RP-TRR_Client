@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent } from "react";
 
 interface FileUploadProps {
   label: string;
@@ -13,13 +13,13 @@ export default function FileUpload({
   label,
   onChange,
   multiple = true,
-  accept = '.pdf,.jpg,.jpeg,.png,.doc,.docx',
+  accept = ".pdf,.jpg,.jpeg,.png,.doc,.docx",
   maxSize = 10,
   required = false,
 }: FileUploadProps) {
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    
+
     // Validate file size
     const validFiles = files.filter((file) => {
       const fileSizeInMB = file.size / (1024 * 1024);
@@ -35,14 +35,14 @@ export default function FileUpload({
 
   return (
     <div className="mb-4">
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+      <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
         {label}
         {required && <span className="text-red-500 ml-1">*</span>}
       </label>
-      <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-        <div className="space-y-1 text-center">
+      <div className="mt-1 flex justify-center px-4 sm:px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg sm:rounded-md">
+        <div className="space-y-1 text-center w-full">
           <svg
-            className="mx-auto h-12 w-12 text-gray-400"
+            className="mx-auto h-10 sm:h-12 w-10 sm:w-12 text-gray-400"
             stroke="currentColor"
             fill="none"
             viewBox="0 0 48 48"
@@ -55,8 +55,8 @@ export default function FileUpload({
               strokeLinejoin="round"
             />
           </svg>
-          <div className="flex text-sm text-gray-600">
-            <label className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+          <div className="flex flex-col sm:flex-row text-xs sm:text-sm text-gray-600 justify-center gap-1">
+            <label className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500 min-h-[44px] sm:min-h-auto flex items-center justify-center">
               <span>อัปโหลดไฟล์</span>
               <input
                 type="file"
@@ -67,7 +67,7 @@ export default function FileUpload({
                 required={required}
               />
             </label>
-            <p className="pl-1">หรือลากไฟล์มาวางที่นี่</p>
+            <p className="hidden sm:block">หรือลากไฟล์มาวางที่นี่</p>
           </div>
           <p className="text-xs text-gray-500">
             PNG, JPG, PDF, DOC, DOCX ขนาดไม่เกิน {maxSize}MB

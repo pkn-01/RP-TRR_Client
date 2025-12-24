@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface InputFieldProps {
   label: string;
@@ -13,7 +13,7 @@ interface InputFieldProps {
 
 export default function InputField({
   label,
-  type = 'text',
+  type = "text",
   placeholder,
   value,
   onChange,
@@ -23,7 +23,7 @@ export default function InputField({
 }: InputFieldProps) {
   return (
     <div className="w-full">
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+      <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
         {label}
         {required && <span className="text-red-500 ml-1">*</span>}
       </label>
@@ -33,15 +33,17 @@ export default function InputField({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         disabled={disabled}
-        className={`w-full px-4 py-3 rounded-lg border-2 transition-colors duration-200 focus:outline-none ${
+        className={`w-full px-3 sm:px-4 py-3 rounded-lg border-2 transition-colors duration-200 focus:outline-none text-base min-h-[44px] ${
           error
-            ? 'border-red-500 focus:border-red-600 bg-red-50'
-            : 'border-gray-200 focus:border-blue-500 bg-white'
-        } ${disabled ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : 'text-gray-900'}`}
+            ? "border-red-500 focus:border-red-600 bg-red-50"
+            : "border-gray-200 focus:border-blue-500 bg-white"
+        } ${
+          disabled
+            ? "bg-gray-100 text-gray-500 cursor-not-allowed"
+            : "text-gray-900"
+        }`}
       />
-      {error && (
-        <p className="mt-1 text-sm text-red-600">{error}</p>
-      )}
+      {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
     </div>
   );
 }
