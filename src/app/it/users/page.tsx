@@ -536,10 +536,10 @@ export default function ITUsersPage() {
                   </label>
                   <select
                     value={formData.role}
-                    onChange={(e) =>
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                       setFormData({
                         ...formData,
-                        role: e.target.value as any,
+                        role: e.target.value as "ADMIN" | "USER" | "IT",
                       })
                     }
                     className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-400/20 focus:border-gray-400 outline-none transition-all text-black font-medium text-sm"
@@ -624,7 +624,9 @@ export default function ITUsersPage() {
                   label="ชื่อ-นามสกุล"
                   required
                   value={formData.name}
-                  onChange={(v) => setFormData({ ...formData, name: v })}
+                  onChange={(v: string) =>
+                    setFormData({ ...formData, name: v })
+                  }
                 />
                 <FormInput
                   label="อีเมล"
@@ -710,10 +712,10 @@ export default function ITUsersPage() {
                   </label>
                   <select
                     value={formData.role}
-                    onChange={(e) =>
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                       setFormData({
                         ...formData,
-                        role: e.target.value as any,
+                        role: e.target.value as "ADMIN" | "USER" | "IT",
                       })
                     }
                     className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-400/20 focus:border-gray-400 outline-none transition-all text-black font-medium text-sm"

@@ -1,74 +1,74 @@
-'use client';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { 
-  ArrowLeft, 
-  Send, 
-  Paperclip, 
-  AlertCircle, 
+"use client";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import {
+  ArrowLeft,
+  Send,
+  Paperclip,
+  AlertCircle,
   CheckCircle2,
   MapPin,
   Laptop,
   Info,
   ChevronRight,
   Zap,
-  HelpCircle
-} from 'lucide-react';
-import SelectField from '@/components/SelectField';
-import FileUpload from '@/components/FileUpload';
-import InputField from '@/components/InputField';
-import { apiFetch } from '@/services/api';
+  HelpCircle,
+} from "lucide-react";
+import SelectField from "@/components/SelectField";
+import FileUpload from "@/components/FileUpload";
+import InputField from "@/components/InputField";
+import { apiFetch } from "@/services/api";
 
 // Problem Categories with Subcategories
 const PROBLEM_CATEGORIES = [
-  { value: 'NETWORK', label: 'เครือข่าย' },
-  { value: 'HARDWARE', label: 'ฮาร์ดแวร์' },
-  { value: 'SOFTWARE', label: 'ซอฟต์แวร์' },
-  { value: 'PRINTER', label: 'เครื่องปริ้นเตอร์' },
-  { value: 'AIR_CONDITIONING', label: 'เครื่องปรับอากาศ' },
-  { value: 'ELECTRICITY', label: 'ไฟฟ้า' },
-  { value: 'OTHER', label: 'อื่นๆ' },
+  { value: "NETWORK", label: "เครือข่าย" },
+  { value: "HARDWARE", label: "ฮาร์ดแวร์" },
+  { value: "SOFTWARE", label: "ซอฟต์แวร์" },
+  { value: "PRINTER", label: "เครื่องปริ้นเตอร์" },
+  { value: "AIR_CONDITIONING", label: "เครื่องปรับอากาศ" },
+  { value: "ELECTRICITY", label: "ไฟฟ้า" },
+  { value: "OTHER", label: "อื่นๆ" },
 ];
 
-const SUBCATEGORIES: { [key: string]: Array<{ value: string; label: string }> } = {
+const SUBCATEGORIES: {
+  [key: string]: Array<{ value: string; label: string }>;
+} = {
   NETWORK: [
-    { value: 'INTERNET_DOWN', label: 'อินเทอร์เน็ตขาด' },
-    { value: 'SLOW_CONNECTION', label: 'การเชื่อมต่อช้า' },
-    { value: 'WIFI_ISSUE', label: 'ปัญหา WiFi' },
+    { value: "INTERNET_DOWN", label: "อินเทอร์เน็ตขาด" },
+    { value: "SLOW_CONNECTION", label: "การเชื่อมต่อช้า" },
+    { value: "WIFI_ISSUE", label: "ปัญหา WiFi" },
   ],
   HARDWARE: [
-    { value: 'MONITOR_BROKEN', label: 'จอมอนิเตอร์เสีย' },
-    { value: 'KEYBOARD_BROKEN', label: 'แป้นพิมพ์เสีย' },
-    { value: 'MOUSE_BROKEN', label: 'เมาส์เสีย' },
-    { value: 'COMPUTER_CRASH', label: 'คอมพิวเตอร์ค้าง' },
+    { value: "MONITOR_BROKEN", label: "จอมอนิเตอร์เสีย" },
+    { value: "KEYBOARD_BROKEN", label: "แป้นพิมพ์เสีย" },
+    { value: "MOUSE_BROKEN", label: "เมาส์เสีย" },
+    { value: "COMPUTER_CRASH", label: "คอมพิวเตอร์ค้าง" },
   ],
   SOFTWARE: [
-    { value: 'INSTALLATION', label: 'ติดตั้งซอฟต์แวร์' },
-    { value: 'LICENSE', label: 'ปัญหาลิขสิทธิ์' },
-    { value: 'PERFORMANCE', label: 'ปัญหาประสิทธิภาพ' },
+    { value: "INSTALLATION", label: "ติดตั้งซอฟต์แวร์" },
+    { value: "LICENSE", label: "ปัญหาลิขสิทธิ์" },
+    { value: "PERFORMANCE", label: "ปัญหาประสิทธิภาพ" },
   ],
   PRINTER: [
-    { value: 'JAM', label: 'กระดาษค้าง' },
-    { value: 'NO_PRINTING', label: 'ไม่สามารถพิมพ์ได้' },
-    { value: 'CARTRIDGE', label: 'ปัญหาตลับหมึก' },
+    { value: "JAM", label: "กระดาษค้าง" },
+    { value: "NO_PRINTING", label: "ไม่สามารถพิมพ์ได้" },
+    { value: "CARTRIDGE", label: "ปัญหาตลับหมึก" },
   ],
   AIR_CONDITIONING: [
-    { value: 'INSTALLATION_AC', label: 'ติดตั้ง' },
-    { value: 'MALFUNCTION_AC', label: 'ขัดข้อง' },
+    { value: "INSTALLATION_AC", label: "ติดตั้ง" },
+    { value: "MALFUNCTION_AC", label: "ขัดข้อง" },
   ],
   ELECTRICITY: [
-    { value: 'POWER_DOWN', label: 'ไฟฟ้าดับ' },
-    { value: 'LIGHT_PROBLEM', label: 'ปัญหาแสงสว่าง' },
+    { value: "POWER_DOWN", label: "ไฟฟ้าดับ" },
+    { value: "LIGHT_PROBLEM", label: "ปัญหาแสงสว่าง" },
   ],
-  OTHER: [
-    { value: 'OTHER', label: 'อื่นๆ' },
-  ],
+  OTHER: [{ value: "OTHER", label: "อื่นๆ" }],
 };
 
 const PRIORITY_OPTIONS = [
-  { value: 'LOW', label: 'ต่ำ' },
-  { value: 'MEDIUM', label: 'ปานกลาง' },
-  { value: 'HIGH', label: 'ด่วน' },
+  { value: "LOW", label: "ต่ำ" },
+  { value: "MEDIUM", label: "ปานกลาง" },
+  { value: "HIGH", label: "ด่วน" },
 ];
 
 export default function CreateRepairRequest() {
@@ -78,42 +78,50 @@ export default function CreateRepairRequest() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  
+
   const [formData, setFormData] = useState({
-    problemCategory: '',
-    problemSubcategory: '',
-    equipmentName: '',
-    location: '',
-    title: '',
-    description: '',
-    priority: 'MEDIUM',
+    problemCategory: "",
+    problemSubcategory: "",
+    equipmentName: "",
+    location: "",
+    title: "",
+    description: "",
+    priority: "MEDIUM",
   });
 
   const totalSteps = 4;
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
-      router.push('/login');
+      router.push("/login");
     } else {
       setIsAuthenticated(true);
     }
   }, [router]);
 
   const handleCategoryChange = (value: string) => {
-    setFormData({ ...formData, problemCategory: value, problemSubcategory: '' });
-    setErrors({ ...errors, problemCategory: '' });
+    setFormData({
+      ...formData,
+      problemCategory: value,
+      problemSubcategory: "",
+    });
+    setErrors({ ...errors, problemCategory: "" });
   };
 
   const validateForm = (): boolean => {
     const newErrors: { [key: string]: string } = {};
 
-    if (!formData.problemCategory) newErrors.problemCategory = 'กรุณาเลือกประเภทหลัก';
-    if (!formData.problemSubcategory) newErrors.problemSubcategory = 'กรุณาเลือกประเภทย่อย';
-    if (!formData.equipmentName.trim()) newErrors.equipmentName = 'กรุณากรอกชื่ออุปกรณ์';
-    if (!formData.location.trim()) newErrors.location = 'กรุณากรอกสถานที่';
-    if (!formData.title.trim()) newErrors.title = 'กรุณากรอกหัวเรื่อง';
-    if (!formData.description.trim()) newErrors.description = 'กรุณากรอกรายละเอียด';
+    if (!formData.problemCategory)
+      newErrors.problemCategory = "กรุณาเลือกประเภทหลัก";
+    if (!formData.problemSubcategory)
+      newErrors.problemSubcategory = "กรุณาเลือกประเภทย่อย";
+    if (!formData.equipmentName.trim())
+      newErrors.equipmentName = "กรุณากรอกชื่ออุปกรณ์";
+    if (!formData.location.trim()) newErrors.location = "กรุณากรอกสถานที่";
+    if (!formData.title.trim()) newErrors.title = "กรุณากรอกหัวเรื่อง";
+    if (!formData.description.trim())
+      newErrors.description = "กรุณากรอกรายละเอียด";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -121,7 +129,7 @@ export default function CreateRepairRequest() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       setCurrentStep(1);
       return;
@@ -131,37 +139,37 @@ export default function CreateRepairRequest() {
 
     try {
       const formDataToSend = new FormData();
-      
-      formDataToSend.append('title', formData.title);
-      formDataToSend.append('description', formData.description);
-      formDataToSend.append('category', 'REPAIR');
-      formDataToSend.append('priority', formData.priority);
-      formDataToSend.append('problemCategory', formData.problemCategory);
-      formDataToSend.append('problemSubcategory', formData.problemSubcategory);
-      formDataToSend.append('equipmentName', formData.equipmentName);
-      formDataToSend.append('location', formData.location);
+
+      formDataToSend.append("title", formData.title);
+      formDataToSend.append("description", formData.description);
+      formDataToSend.append("category", "REPAIR");
+      formDataToSend.append("priority", formData.priority);
+      formDataToSend.append("problemCategory", formData.problemCategory);
+      formDataToSend.append("problemSubcategory", formData.problemSubcategory);
+      formDataToSend.append("equipmentName", formData.equipmentName);
+      formDataToSend.append("location", formData.location);
 
       files.forEach((file) => {
-        formDataToSend.append('files', file);
+        formDataToSend.append("files", file);
       });
 
-      const response = await fetch('http://localhost:3001/api/tickets', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3001/api/tickets", {
+        method: "POST",
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: formDataToSend,
       });
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message || 'Failed to create ticket');
+        throw new Error(error.message || "Failed to create ticket");
       }
 
       const result = await response.json();
       router.push(`/tickets/${result.id}`);
     } catch (error: any) {
-      alert(error.message || 'เกิดข้อผิดพลาด');
+      alert(error.message || "เกิดข้อผิดพลาด");
     } finally {
       setLoading(false);
     }
@@ -174,18 +182,19 @@ export default function CreateRepairRequest() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <div className="w-full">
-        
         {/* Navigation */}
-        <button 
+        <button
           onClick={() => router.back()}
           className="flex items-center gap-2 text-slate-500 hover:text-indigo-600 transition-all duration-300 mb-8 group hover:gap-3 px-8 pt-8"
         >
-          <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+          <ArrowLeft
+            size={18}
+            className="group-hover:-translate-x-1 transition-transform"
+          />
           <span className="text-sm font-medium">ย้อนกลับ</span>
         </button>
 
         <div className="bg-white rounded-none shadow-2xl overflow-hidden border border-slate-100">
-          
           {/* Enhanced Header */}
           <div className="relative bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-700 px-8 py-12 text-white overflow-hidden">
             <div className="absolute inset-0 opacity-20">
@@ -196,10 +205,13 @@ export default function CreateRepairRequest() {
                 <div className="p-2.5 bg-white/20 rounded-lg">
                   <Zap size={20} />
                 </div>
-                <h1 className="text-3xl font-bold tracking-tight">แจ้งซ่อมอุปกรณ์</h1>
+                <h1 className="text-3xl font-bold tracking-tight">
+                  แจ้งซ่อมอุปกรณ์
+                </h1>
               </div>
               <p className="text-indigo-100 text-sm leading-relaxed">
-                กรุณากรอกข้อมูลให้ครบถ้วนและชัดเจน เพื่อให้เจ้าหน้าที่สามารถดำเนินการได้อย่างรวดเร็วและแม่นยำ
+                กรุณากรอกข้อมูลให้ครบถ้วนและชัดเจน
+                เพื่อให้เจ้าหน้าที่สามารถดำเนินการได้อย่างรวดเร็วและแม่นยำ
               </p>
             </div>
           </div>
@@ -213,21 +225,21 @@ export default function CreateRepairRequest() {
                 const isCompleted = step < currentStep;
                 return (
                   <div key={step} className="flex items-center flex-1">
-                    <div 
+                    <div
                       className={`flex items-center justify-center w-10 h-10 rounded-full font-semibold text-sm transition-all duration-300 ${
-                        isCompleted 
-                          ? 'bg-emerald-500 text-white shadow-md'
-                          : isActive 
-                          ? 'bg-indigo-600 text-white ring-4 ring-indigo-200 shadow-lg'
-                          : 'bg-slate-200 text-slate-600'
+                        isCompleted
+                          ? "bg-emerald-500 text-white shadow-md"
+                          : isActive
+                          ? "bg-indigo-600 text-white ring-4 ring-indigo-200 shadow-lg"
+                          : "bg-slate-200 text-slate-600"
                       }`}
                     >
                       {isCompleted ? <CheckCircle2 size={20} /> : step}
                     </div>
                     {step < totalSteps && (
-                      <div 
+                      <div
                         className={`flex-1 h-1 mx-2 rounded transition-all duration-300 ${
-                          isCompleted ? 'bg-emerald-500' : 'bg-slate-200'
+                          isCompleted ? "bg-emerald-500" : "bg-slate-200"
                         }`}
                       ></div>
                     )}
@@ -244,19 +256,26 @@ export default function CreateRepairRequest() {
           </div>
 
           <form onSubmit={handleSubmit} className="p-12 space-y-10">
-            
             {/* Step 1: Classification */}
-            <div className={`space-y-6 transition-all duration-300 ${currentStep !== 1 && 'opacity-50 pointer-events-none'}`}>
+            <div
+              className={`space-y-6 transition-all duration-300 ${
+                currentStep !== 1 && "opacity-50 pointer-events-none"
+              }`}
+            >
               <div className="flex items-start gap-3">
                 <div className="p-2.5 bg-indigo-100 rounded-lg mt-1">
                   <Info size={18} className="text-indigo-600" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-slate-900">ข้อมูลประเภทปัญหา</h2>
-                  <p className="text-sm text-slate-500 mt-1">เลือกประเภทที่สัมพันธ์กับปัญหาของอุปกรณ์ของคุณ</p>
+                  <h2 className="text-lg font-bold text-slate-900">
+                    ข้อมูลประเภทปัญหา
+                  </h2>
+                  <p className="text-sm text-slate-500 mt-1">
+                    เลือกประเภทที่สัมพันธ์กับปัญหาของอุปกรณ์ของคุณ
+                  </p>
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pl-11">
                 <div>
                   <SelectField
@@ -276,9 +295,9 @@ export default function CreateRepairRequest() {
                   <SelectField
                     label="ประเภทย่อย"
                     value={formData.problemSubcategory}
-                    onChange={(v) => {
+                    onChange={(v: string) => {
                       setFormData({ ...formData, problemSubcategory: v });
-                      setErrors({ ...errors, problemSubcategory: '' });
+                      setErrors({ ...errors, problemSubcategory: "" });
                     }}
                     options={availableSubcategories}
                     disabled={!formData.problemCategory}
@@ -296,8 +315,14 @@ export default function CreateRepairRequest() {
                 <div className="flex justify-end pt-4 pl-11">
                   <button
                     type="button"
-                    onClick={() => formData.problemCategory && formData.problemSubcategory && setCurrentStep(2)}
-                    disabled={!formData.problemCategory || !formData.problemSubcategory}
+                    onClick={() =>
+                      formData.problemCategory &&
+                      formData.problemSubcategory &&
+                      setCurrentStep(2)
+                    }
+                    disabled={
+                      !formData.problemCategory || !formData.problemSubcategory
+                    }
                     className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:bg-slate-300 transition-all duration-200 font-medium text-sm"
                   >
                     ถัดไป <ChevronRight size={16} />
@@ -307,26 +332,34 @@ export default function CreateRepairRequest() {
             </div>
 
             {/* Step 2: Equipment Detail */}
-            <div className={`space-y-6 transition-all duration-300 ${currentStep !== 2 && 'opacity-50 pointer-events-none'}`}>
+            <div
+              className={`space-y-6 transition-all duration-300 ${
+                currentStep !== 2 && "opacity-50 pointer-events-none"
+              }`}
+            >
               <div className="flex items-start gap-3">
                 <div className="p-2.5 bg-blue-100 rounded-lg mt-1">
                   <Laptop size={18} className="text-blue-600" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-slate-900">รายละเอียดอุปกรณ์และสถานที่</h2>
-                  <p className="text-sm text-slate-500 mt-1">ระบุอุปกรณ์ที่เสีย และสถานที่ตั้งอุปกรณ์</p>
+                  <h2 className="text-lg font-bold text-slate-900">
+                    รายละเอียดอุปกรณ์และสถานที่
+                  </h2>
+                  <p className="text-sm text-slate-500 mt-1">
+                    ระบุอุปกรณ์ที่เสีย และสถานที่ตั้งอุปกรณ์
+                  </p>
                 </div>
               </div>
-              
+
               <div className="space-y-5 pl-11">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div>
                     <InputField
                       label="ชื่ออุปกรณ์ / รหัสครุภัณฑ์"
                       value={formData.equipmentName}
-                      onChange={(v) => {
+                      onChange={(v: string) => {
                         setFormData({ ...formData, equipmentName: v });
-                        setErrors({ ...errors, equipmentName: '' });
+                        setErrors({ ...errors, equipmentName: "" });
                       }}
                       placeholder="เช่น PC-Dept-01, HP LaserJet Pro"
                       required
@@ -341,9 +374,9 @@ export default function CreateRepairRequest() {
                     <InputField
                       label="สถานที่ / ห้อง"
                       value={formData.location}
-                      onChange={(v) => {
+                      onChange={(v: string) => {
                         setFormData({ ...formData, location: v });
-                        setErrors({ ...errors, location: '' });
+                        setErrors({ ...errors, location: "" });
                       }}
                       placeholder="เช่น ชั้น 3 ห้องบัญชี หรือ ห้องประชุมหลัก"
                       required
@@ -358,18 +391,26 @@ export default function CreateRepairRequest() {
 
                 <div>
                   <div className="flex items-center gap-2 mb-3">
-                    <label className="text-sm font-semibold text-slate-700">ระดับความเร่งด่วน</label>
+                    <label className="text-sm font-semibold text-slate-700">
+                      ระดับความเร่งด่วน
+                    </label>
                     <div className="group relative">
-                      <HelpCircle size={16} className="text-slate-400 cursor-help" />
+                      <HelpCircle
+                        size={16}
+                        className="text-slate-400 cursor-help"
+                      />
                       <div className="hidden group-hover:block absolute left-0 bottom-full mb-2 w-48 bg-slate-800 text-white text-xs rounded-lg p-2 z-10">
-                        ต่ำ: ไม่มีความเร่งด่วน | ปานกลาง: ปกติ | ด่วน: ส่งผลกระทบต่อการทำงาน
+                        ต่ำ: ไม่มีความเร่งด่วน | ปานกลาง: ปกติ | ด่วน:
+                        ส่งผลกระทบต่อการทำงาน
                       </div>
                     </div>
                   </div>
                   <SelectField
                     label=""
                     value={formData.priority}
-                    onChange={(v) => setFormData({ ...formData, priority: v })}
+                    onChange={(v: string) =>
+                      setFormData({ ...formData, priority: v })
+                    }
                     options={PRIORITY_OPTIONS}
                   />
                 </div>
@@ -386,7 +427,11 @@ export default function CreateRepairRequest() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => formData.equipmentName && formData.location && setCurrentStep(3)}
+                    onClick={() =>
+                      formData.equipmentName &&
+                      formData.location &&
+                      setCurrentStep(3)
+                    }
                     disabled={!formData.equipmentName || !formData.location}
                     className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:bg-slate-300 transition-all font-medium text-sm"
                   >
@@ -397,25 +442,33 @@ export default function CreateRepairRequest() {
             </div>
 
             {/* Step 3: Problem Description */}
-            <div className={`space-y-6 transition-all duration-300 ${currentStep !== 3 && 'opacity-50 pointer-events-none'}`}>
+            <div
+              className={`space-y-6 transition-all duration-300 ${
+                currentStep !== 3 && "opacity-50 pointer-events-none"
+              }`}
+            >
               <div className="flex items-start gap-3">
                 <div className="p-2.5 bg-orange-100 rounded-lg mt-1">
                   <AlertCircle size={18} className="text-orange-600" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-slate-900">อาการที่พบ</h2>
-                  <p className="text-sm text-slate-500 mt-1">อธิบายอาการเสีย และรายละเอียดเพิ่มเติมให้ชัดเจน</p>
+                  <h2 className="text-lg font-bold text-slate-900">
+                    อาการที่พบ
+                  </h2>
+                  <p className="text-sm text-slate-500 mt-1">
+                    อธิบายอาการเสีย และรายละเอียดเพิ่มเติมให้ชัดเจน
+                  </p>
                 </div>
               </div>
-              
+
               <div className="space-y-5 pl-11">
                 <div>
                   <InputField
                     label="หัวเรื่อง"
                     value={formData.title}
-                    onChange={(v) => {
+                    onChange={(v: string) => {
                       setFormData({ ...formData, title: v });
-                      setErrors({ ...errors, title: '' });
+                      setErrors({ ...errors, title: "" });
                     }}
                     placeholder="สรุปปัญหาสั้นๆ เช่น 'เปิดเครื่องไม่ติด', 'จอหญิงลาย'"
                     required
@@ -435,7 +488,7 @@ export default function CreateRepairRequest() {
                     value={formData.description}
                     onChange={(e) => {
                       setFormData({ ...formData, description: e.target.value });
-                      setErrors({ ...errors, description: '' });
+                      setErrors({ ...errors, description: "" });
                     }}
                     rows={5}
                     className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none text-slate-700 placeholder-slate-400 resize-none"
@@ -464,7 +517,11 @@ export default function CreateRepairRequest() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => formData.title && formData.description && setCurrentStep(4)}
+                    onClick={() =>
+                      formData.title &&
+                      formData.description &&
+                      setCurrentStep(4)
+                    }
                     disabled={!formData.title || !formData.description}
                     className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:bg-slate-300 transition-all font-medium text-sm"
                   >
@@ -475,14 +532,22 @@ export default function CreateRepairRequest() {
             </div>
 
             {/* Step 4: Attachments */}
-            <div className={`space-y-6 transition-all duration-300 ${currentStep !== 4 && 'opacity-50 pointer-events-none'}`}>
+            <div
+              className={`space-y-6 transition-all duration-300 ${
+                currentStep !== 4 && "opacity-50 pointer-events-none"
+              }`}
+            >
               <div className="flex items-start gap-3">
                 <div className="p-2.5 bg-purple-100 rounded-lg mt-1">
                   <Paperclip size={18} className="text-purple-600" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-slate-900">หลักฐานภาพถ่าย</h2>
-                  <p className="text-sm text-slate-500 mt-1">อัพโหลดภาพถ่ายเพื่อแสดงอาการเสีย (ไม่บังคับ)</p>
+                  <h2 className="text-lg font-bold text-slate-900">
+                    หลักฐานภาพถ่าย
+                  </h2>
+                  <p className="text-sm text-slate-500 mt-1">
+                    อัพโหลดภาพถ่ายเพื่อแสดงอาการเสีย (ไม่บังคับ)
+                  </p>
                 </div>
               </div>
 
@@ -495,15 +560,23 @@ export default function CreateRepairRequest() {
                 />
                 {files.length > 0 && (
                   <div className="mt-6">
-                    <p className="text-sm font-semibold text-slate-700 mb-3">ไฟล์ที่เลือก ({files.length})</p>
+                    <p className="text-sm font-semibold text-slate-700 mb-3">
+                      ไฟล์ที่เลือก ({files.length})
+                    </p>
                     <div className="flex flex-wrap gap-3">
                       {files.map((file, i) => (
-                        <div 
-                          key={i} 
+                        <div
+                          key={i}
                           className="bg-white px-4 py-3 rounded-lg border border-purple-200 text-xs text-slate-600 flex items-center gap-2 shadow-sm hover:shadow-md hover:border-purple-400 transition-all"
                         >
-                          <CheckCircle2 size={16} className="text-emerald-500 flex-shrink-0" />
-                          <span className="truncate max-w-[200px]" title={file.name}>
+                          <CheckCircle2
+                            size={16}
+                            className="text-emerald-500 flex-shrink-0"
+                          />
+                          <span
+                            className="truncate max-w-[200px]"
+                            title={file.name}
+                          >
                             {file.name}
                           </span>
                           <span className="text-slate-400 flex-shrink-0">
@@ -537,7 +610,10 @@ export default function CreateRepairRequest() {
                     </>
                   ) : (
                     <>
-                      <Send size={18} className="group-hover:translate-x-1 transition-transform" />
+                      <Send
+                        size={18}
+                        className="group-hover:translate-x-1 transition-transform"
+                      />
                       <span>ส่งข้อมูลการแจ้งซ่อม</span>
                     </>
                   )}
@@ -550,12 +626,24 @@ export default function CreateRepairRequest() {
         {/* Help Footer */}
         <div className="mt-8 p-6 bg-white rounded-2xl border border-slate-200 shadow-sm">
           <div className="flex items-start gap-3">
-            <HelpCircle size={18} className="text-indigo-600 mt-0.5 flex-shrink-0" />
+            <HelpCircle
+              size={18}
+              className="text-indigo-600 mt-0.5 flex-shrink-0"
+            />
             <div>
-              <p className="font-semibold text-slate-900 text-sm mb-2">ต้องการความช่วยเหลือ?</p>
+              <p className="font-semibold text-slate-900 text-sm mb-2">
+                ต้องการความช่วยเหลือ?
+              </p>
               <p className="text-sm text-slate-600">
-                กรุณาให้รายละเอียดให้มากที่สุด เพื่อให้เจ้าหน้าที่สามารถจัดการเรื่องของคุณได้อย่างมีประสิทธิภาพ 
-                หากมีคำถาม <a href="mailto:support@company.com" className="text-indigo-600 hover:underline">ติดต่อเราได้</a>
+                กรุณาให้รายละเอียดให้มากที่สุด
+                เพื่อให้เจ้าหน้าที่สามารถจัดการเรื่องของคุณได้อย่างมีประสิทธิภาพ
+                หากมีคำถาม{" "}
+                <a
+                  href="mailto:support@company.com"
+                  className="text-indigo-600 hover:underline"
+                >
+                  ติดต่อเราได้
+                </a>
               </p>
             </div>
           </div>
@@ -570,7 +658,9 @@ function LoadingState() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <div className="text-center">
         <div className="w-14 h-14 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mx-auto mb-4 shadow-lg" />
-        <p className="text-slate-600 font-semibold tracking-wide">กำลังเตรียมข้อมูล...</p>
+        <p className="text-slate-600 font-semibold tracking-wide">
+          กำลังเตรียมข้อมูล...
+        </p>
         <p className="text-slate-400 text-sm mt-2">โปรดรอสักครู่</p>
       </div>
     </div>
