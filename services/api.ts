@@ -57,31 +57,55 @@ export async function apiFetch(url: string, options?: string | FetchOptions | "G
   });
 
   console.log(`[apiFetch] ${method} ${url} → Status: ${res.status}`);
-
-  // Handle error responses
-  if (!res.ok) {
+  // Parse response body if possible
+  const contentType = res.headers.get("content-type");
+  let parsedData: any = null;
+  let rawText: string | null = null;
+  if (contentType && contentType.includes("application/json")) {
     try {
-      const error = await res.json();
-      console.error(`[apiFetch] Error response:`, error);
-      throw new Error(error.message || `API Error: ${res.status}`);
-    } catch (parseError) {
-      // If response isn't JSON, use status text
-      console.error(`[apiFetch] Parse error:`, parseError);
-      throw new Error(`API Error: ${res.status} ${res.statusText}`);
+      parsedData = await res.json();
+    } catch (e) {
+      parsedData = null;
+    }
+  } else {
+    try {
+      rawText = await res.text();
+      parsedData = rawText ? JSON.parse(rawText) : null;
+    } catch (e) {
+      // not JSON
+      parsedData = rawText;
     }
   }
 
-  // Handle successful responses
-  const contentType = res.headers.get("content-type");
-  if (contentType && contentType.includes("application/json")) {
-    const data = await res.json();
-    console.log(`[apiFetch] Success response:`, data);
-    return data;
+  // Backward-compatibility:
+  // - For GET requests (default/no options) return parsed data directly (existing behavior)
+  // - For non-GET requests return a Response-like object so callers can check `response.ok` and call `response.json()`
+  if (method === "GET") {
+    if (!res.ok) {
+      // preserve previous behavior for GET: throw on non-OK
+      const msg = parsedData?.message || `${res.status} ${res.statusText}`;
+      throw new Error(msg);
+    }
+    console.log(`[apiFetch] Success response:`, parsedData);
+    return parsedData;
   }
 
-  // If no content-type or not JSON, return null (for 204 No Content, etc.)
-  const text = await res.text();
-  const result = text ? JSON.parse(text) : null;
-  console.log(`[apiFetch] Text response:`, result);
-  return result;
+  // For POST/PUT/DELETE etc: return an object that mimics the fetch Response API
+  const responseLike = {
+    ok: res.ok,
+    status: res.status,
+    statusText: res.statusText,
+    headers: res.headers,
+    json: async () => parsedData,
+    text: async () => (rawText !== null ? rawText : JSON.stringify(parsedData)),
+    data: parsedData,
+  } as const;
+
+  if (!res.ok) {
+    console.error(`[apiFetch] Error response:`, parsedData);
+  } else {
+    console.log(`[apiFetch] Success response:`, parsedData);
+  }
+
+  return responseLike;
 }
