@@ -22,7 +22,12 @@ export async function apiFetch(url: string, options?: string | FetchOptions | "G
   if (typeof options === "string") {
     // Old style: apiFetch(url, method, body)
     method = options;
-    requestBody = body ? JSON.stringify(body) : undefined;
+    // If body is FormData, don't stringify it
+    if (body instanceof FormData) {
+      requestBody = body;
+    } else {
+      requestBody = body ? JSON.stringify(body) : undefined;
+    }
   } else if (typeof options === "object" && options !== null) {
     // New style: apiFetch(url, { method, body, headers, ... })
     method = options.method || "GET";
@@ -32,7 +37,16 @@ export async function apiFetch(url: string, options?: string | FetchOptions | "G
     };
     // Handle body - can be string or object
     if (options.body) {
-      requestBody = typeof options.body === "string" ? options.body : options.body;
+      // If body is FormData, don't stringify it
+      if (options.body instanceof FormData) {
+        requestBody = options.body;
+      } else {
+        requestBody = typeof options.body === "string" ? options.body : options.body;
+      }
+      // If body is FormData, don't set Content-Type - let browser set it with boundary
+      if (requestBody instanceof FormData) {
+        delete headers["Content-Type"];
+      }
     }
   }
 
