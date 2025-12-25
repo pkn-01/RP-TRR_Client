@@ -56,6 +56,7 @@ export async function apiFetch(url: string, options?: string | FetchOptions | "G
     body: requestBody,
   });
 
+
   console.log(`[apiFetch] ${method} ${url} → Status: ${res.status}`);
   // Parse response body if possible
   const contentType = res.headers.get("content-type");
@@ -88,6 +89,23 @@ export async function apiFetch(url: string, options?: string | FetchOptions | "G
     }
     console.log(`[apiFetch] Success response:`, parsedData);
     return parsedData;
+  }
+
+  // If this is a protected API call and there's no token, return 401-like response
+  const isApiPath = url.startsWith('/api');
+  const isPublicEndpoint = url.includes('line-oa');
+  if (isApiPath && !isPublicEndpoint && !token) {
+    const unauth = {
+      ok: false,
+      status: 401,
+      statusText: 'Unauthorized',
+      headers: new Headers(),
+      json: async () => ({ message: 'คุณต้องเข้าสู่ระบบก่อนทำรายการ' }),
+      text: async () => JSON.stringify({ message: 'คุณต้องเข้าสู่ระบบก่อนทำรายการ' }),
+      data: { message: 'คุณต้องเข้าสู่ระบบก่อนทำรายการ' },
+    } as const;
+    console.warn('[apiFetch] Missing auth token for protected API:', url);
+    return unauth;
   }
 
   // For POST/PUT/DELETE etc: return an object that mimics the fetch Response API

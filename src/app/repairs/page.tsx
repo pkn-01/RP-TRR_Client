@@ -50,6 +50,27 @@ export default function RepairPage() {
     setLoading(true);
     setError("");
 
+    // Ensure user is authenticated
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    if (!token) {
+      // Store a toast message to show on login page
+      try {
+        sessionStorage.setItem(
+          "toast",
+          JSON.stringify({
+            type: "error",
+            message: "กรุณาเข้าสู่ระบบก่อนทำรายการ",
+          })
+        );
+      } catch (e) {
+        // ignore
+      }
+      router.push("/login");
+      setLoading(false);
+      return;
+    }
+
     try {
       const formData = new FormData();
       formData.append("problemType", problem);

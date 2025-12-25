@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useEffect } from "react";
 import InputField from "@/components/InputField";
 import Button from "@/components/Button";
 import Card from "@/components/Card";
@@ -23,6 +24,20 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem("toast");
+      if (raw) {
+        const t = JSON.parse(raw);
+        if (t?.type === "error") setErrorMessage(t.message || "");
+        if (t?.type === "success") setSuccessMessage(t.message || "");
+        sessionStorage.removeItem("toast");
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, []);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
